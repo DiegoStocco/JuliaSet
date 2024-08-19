@@ -1,10 +1,13 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <complex>
 #include <iostream>
 
 int main() {
     unsigned int width = 800;
     unsigned int height = 800;
+    unsigned int renderWidth = 800;
+    unsigned int renderHeight = 800;
     sf::Vector2f c(0,0);
     const int maxIterCount = 80;
     
@@ -36,6 +39,12 @@ int main() {
                 window.setView(sf::View(screen));
             }
         }
+				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+					sf::Texture tex;
+					tex.create(width, height);
+					tex.update(window);
+					tex.copyToImage().saveToFile("frattalo.png");
+				}
         if(a >= 2*M_PI)a = 0;
         else a += M_PI/200;
         
