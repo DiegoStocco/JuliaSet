@@ -74,7 +74,7 @@ int main() {
 				render_tex.clear();
 
 				// Set shaders variables
-				render_julia.setUniform("u_screenSize", screen.getSize());
+				render_julia.setUniform("u_screenSize", tex_rec.getSize());
 				render_julia.setUniform("u_constant", c);
 				render_julia.setUniform("u_maxIterCount", maxIterCount);
 
