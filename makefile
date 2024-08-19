@@ -8,11 +8,11 @@ CC = g++
 LINKER = g++
 
 COMPILER_FLAGS = -O2 -Wall -g
-LINKER_FLAGS = -lsfml_graphics -lsfml_window -lsfml_system
+LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 RESULT = julia
 
-all: $RESULT
+all: $(RESULT)
 
 $(RESULT): $(OBJS) $(HEADERS)
 	$(LINKER) $(OBJS) $(LINKER_FLAGS) -o $(RESULT)
@@ -23,7 +23,7 @@ $(RESULT): $(OBJS) $(HEADERS)
 .PHONY: clean run
 clean:
 	rm -f $(OBJS)
-	rm -f RESULT
+	rm -f $(RESULT)
 
 run: $(RESULT)
 	./$(RESULT)
