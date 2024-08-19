@@ -64,12 +64,12 @@ int main() {
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 					saveWindowToFile(window, "frattalo.png");
 				}
-        if(a >= 2*M_PI)a = 0;
-        else a += M_PI/200;
+
+        a += M_PI/200;
+				a = std::fmod(a, 2*M_PI);
         
-        std::complex o = std::exp(std::complex<float>(0, a));
-        c.x = o.real();
-        c.y = o.imag();
+				// c = e^(ia)
+				c = {cosf(a), sinf(a)};
 
 				render_tex.clear();
 
