@@ -8,13 +8,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
-void saveWindowToFile(const sf::Window &window, const std::string &path) {
-		sf::Texture tex;
-		tex.create(window.getSize().x, window.getSize().y);
-		tex.update(window);
-		tex.copyToImage().saveToFile("frattalo.png");
-}
-
 int main() {
     unsigned int width = 800;
     unsigned int height = 800;
@@ -62,7 +55,7 @@ int main() {
             }
         }
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-					saveWindowToFile(window, "frattalo.png");
+					render_tex.getTexture().copyToImage().saveToFile("julia.png");
 				}
 
         a += M_PI/200;
