@@ -1,11 +1,19 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Window/Window.hpp>
 #include <iostream>
 #include <complex>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+
+void saveWindowToFile(const sf::Window &window, const std::string &path) {
+		sf::Texture tex;
+		tex.create(window.getSize().x, window.getSize().y);
+		tex.update(window);
+		tex.copyToImage().saveToFile("frattalo.png");
+}
 
 int main() {
     unsigned int width = 800;
@@ -54,10 +62,7 @@ int main() {
             }
         }
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-					sf::Texture tex;
-					tex.create(width, height);
-					tex.update(window);
-					tex.copyToImage().saveToFile("frattalo.png");
+					saveWindowToFile(window, "frattalo.png");
 				}
         if(a >= 2*M_PI)a = 0;
         else a += M_PI/200;
