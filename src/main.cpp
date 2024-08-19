@@ -1,21 +1,35 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <complex>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <iostream>
+#include <complex>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
 int main() {
     unsigned int width = 800;
     unsigned int height = 800;
     unsigned int renderWidth = 800;
     unsigned int renderHeight = 800;
+
     sf::Vector2f c(0,0);
     const int maxIterCount = 80;
     
     // Create the window
     sf::RenderWindow window(sf::VideoMode(width, height), "Julia's Set'");
     window.setVerticalSyncEnabled(true);
-    // Create an image and a texture to render the pixels
-    sf::Rect<float> screen(0, 0, width, height);
+    // Create the texture that will be rendered by the shader
+	  sf::RenderTexture render_tex;
+		render_tex.create(renderWidth, renderHeight);
+
+	  // Rectangle needed to draw on texture
+    sf::RectangleShape tex_rec(sf::Vector2f(renderWidth, renderHeight));
+
+		// sprite used to draw the texture on screen
+		sf::Rect<float> screen(0, 0, width, height);
+		sf::Sprite screen_sprite;
+		screen_sprite.setTexture(render_tex.getTexture());
 
 		// Load the shader
 		sf::Shader render_julia;
@@ -52,19 +66,26 @@ int main() {
         c.x = o.real();
         c.y = o.imag();
 
-        // Clear the window
-        window.clear();
-				
+				render_tex.clear();
+
 				// Set shaders variables
 				render_julia.setUniform("u_screenSize", screen.getSize());
 				render_julia.setUniform("u_constant", c);
 				render_julia.setUniform("u_maxIterCount", maxIterCount);
 
-        // Draw the rectangle, which is filled by the shader
-        window.draw(sf::RectangleShape(screen.getSize()), &render_julia);
+				// Fill the texture with Julia using the shader
+				render_tex.draw(tex_rec, &render_julia);
+				render_tex.display();
+
+        // Clear the window
+        window.clear();
+				
+
+        // Draw the sprite, which contains the texture
+		    screen_sprite.setScale(sf::Vector2((float)width/renderWidth , (float)height/renderHeight));
+        window.draw(screen_sprite);
         // Display the contents of the window
         window.display();
-        //image.saveToFile("frat.png");
     }
     
     return 0;
