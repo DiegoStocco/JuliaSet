@@ -1,6 +1,3 @@
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Window/Window.hpp>
 #include <iostream>
 #include <complex>
 
