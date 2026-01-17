@@ -1,5 +1,5 @@
-#include <complex>
 #include <iostream>
+#include <cmath>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -15,45 +15,40 @@ int main() {
   const int maxIterCount = 80;
 
   // Create the window
-  sf::RenderWindow window(sf::VideoMode(width, height), "Julia's Set'");
+  sf::RenderWindow window(sf::VideoMode({width, height}), "Julia's Set'");
   window.setVerticalSyncEnabled(true);
   // Create the texture that will be rendered by the shader
-  sf::RenderTexture render_tex;
-  render_tex.create(renderWidth, renderHeight);
+  sf::RenderTexture render_tex({renderWidth, renderHeight});
 
   // Rectangle needed to draw on texture
   sf::RectangleShape tex_rec(sf::Vector2f(renderWidth, renderHeight));
 
   // sprite used to draw the texture on screen
-  sf::Rect<float> screen(0, 0, width, height);
-  sf::Sprite screen_sprite;
-  screen_sprite.setTexture(render_tex.getTexture());
+  sf::Rect<float> screen({0, 0}, {(float)width, (float)height});
+  sf::Sprite screen_sprite(render_tex.getTexture());
 
   // Load the shader
   sf::Shader render_julia;
   if (!render_julia.loadFromFile("shaders/render_julia.glsl",
-                                 sf::Shader::Fragment)) {
+                                 sf::Shader::Type::Fragment)) {
     std::cerr << "Unable to load shader" << std::endl;
   }
 
   // Main loop
   float a = 0;
   while (window.isOpen()) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
+    
+    while (const std::optional<sf::Event> event = window.pollEvent()) {
+      if (event->is<sf::Event::Closed>()) {
         window.close();
-      } else if (event.type == sf::Event::Resized) {
+      } else if (const auto *size = event->getIf<sf::Event::Resized>()) {
         // Update the window size
-        width = event.size.width;
-        height = event.size.height;
-        screen.width = width;
-        screen.height = height;
+        screen.size = (sf::Vector2f)size->size;
         window.setView(sf::View(screen));
       }
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-      render_tex.getTexture().copyToImage().saveToFile("julia.png");
+        std::ignore = render_tex.getTexture().copyToImage().saveToFile("julia.png");
     }
 
     a += M_PI / 200;
